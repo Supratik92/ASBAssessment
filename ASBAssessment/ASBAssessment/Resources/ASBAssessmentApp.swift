@@ -11,7 +11,7 @@ import SwiftUI
 struct ASBAssessmentApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AccountTransactionDetailsListView()
         }
     }
 }

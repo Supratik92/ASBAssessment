@@ -7,7 +7,10 @@
 
 import Foundation
 
+/// Enum for HTTP Methods
 enum AccountDetailsHTTPMethod: String {
+    /// Get case
     case get = "GET"
+    /// Post Case
     case post = "POST"
 }

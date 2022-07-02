@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  ASBAssessment
+
+  Created by Banerjee, Supratik on 30/06/22.
+  
+*/
+
+"transaction.noRecordsFound" = "No Records Found";
+"transaction.otherDates" = "Please check for other dates";
+"transaction.errorText" = "Something went wrong. Please try again.";
+"transaction.okay" = "Okay";
+"transactions.loading" = "Loading";
+"transaction.accountStatement" = "Account Statements";
