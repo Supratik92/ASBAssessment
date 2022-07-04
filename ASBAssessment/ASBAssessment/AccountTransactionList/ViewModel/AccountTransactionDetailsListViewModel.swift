@@ -6,6 +6,8 @@
 //
 
 import Combine
+import Foundation
+import SwiftUI
 
 /// AccountTransactionDetailsListViewModel for List view operations
 class AccountTransactionDetailsListViewModel: ObservableObject {
@@ -20,6 +22,14 @@ class AccountTransactionDetailsListViewModel: ObservableObject {
     var transactionDetailsArrayCount: Int {
         return transactionDetailsArray.count
     }
+
+    /// Initializer of AccountTransactionDetailsListViewModel
+    /// - Parameter transactionDetailsArray: AccountTransactionDetailsModel type array
+    init(transactionDetailsArray: [AccountTransactionDetailsModel] = []) {
+        if !transactionDetailsArray.isEmpty {
+            self.transactionDetailsArray = sortTransaction(modelArray: transactionDetailsArray)
+        }
+    }
 }
 
 // AccountTransactionDetailsListViewModel Service extension
@@ -32,7 +42,7 @@ extension AccountTransactionDetailsListViewModel {
         let transactionResponse = await AccountDetailsService().getAccountDetailsInfo()
         switch transactionResponse {
         case .success(let responseModelArray):
-            transactionDetailsArray = responseModelArray
+            transactionDetailsArray = sortTransaction(modelArray: responseModelArray)
         case .failure(let transactionError):
             throw transactionError
         }
@@ -51,5 +61,17 @@ extension AccountTransactionDetailsListViewModel {
             return transaction
         }
         return nil
+    }
+
+    /// This method helps to sort transaction array
+    /// - Parameter modelArray: AccountTransactionDetailsModel array
+    /// - Returns: Sorted AccountTransactionDetailsModel array
+    private func sortTransaction(modelArray: [AccountTransactionDetailsModel]) -> [AccountTransactionDetailsModel] {
+        return modelArray.sorted { accountTransactionModelFirst, accountTransactionModelSecond in
+            if let firstDateString = accountTransactionModelFirst.transactionDate, let secondDateString = accountTransactionModelSecond.transactionDate, let firstDate = Date().dateFromString(firstDateString, format: AccountTransactionDetailsModel.transactionDateFormat), let secondDate =  Date().dateFromString(secondDateString, format: AccountTransactionDetailsModel.transactionDateFormat) {
+                return firstDate > secondDate
+            }
+            return false
+        }
     }
 }

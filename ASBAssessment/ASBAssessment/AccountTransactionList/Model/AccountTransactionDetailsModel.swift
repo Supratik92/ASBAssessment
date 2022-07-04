@@ -10,6 +10,12 @@ import Foundation
 /// AccountTransactionDetailsModel to store account related information
 struct AccountTransactionDetailsModel: Codable {
 
+    /// Date format to show in view
+    private static let viewDateFormat = "EEE, d MMM yyyy HH:mm"
+
+    /// Date format of transaction date
+    static let transactionDateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+
     /// Property represents Id of account
     let id: Int?
 
@@ -41,9 +47,9 @@ extension AccountTransactionDetailsModel {
     var amount: String {
         if let isDebited = isDebited {
             if isDebited, let debitAmount = debit {
-                return "\(debitAmount.delimiter)"
+                return "-\(debitAmount.delimiter)"
             } else if let creditAmount = credit {
-                return "\(creditAmount.delimiter)"
+                return "+\(creditAmount.delimiter)"
             }
         }
         return ""
@@ -51,7 +57,7 @@ extension AccountTransactionDetailsModel {
 
     /// Transaction Date EEE, d MMM yyyy HH:mm format
     var trasactionDateLocalFormat: String? {
-        guard let trascationDate = transactionDate, let localDate = Date().dateFromString(trascationDate, currentFormat: "yyyy-MM-dd'T'HH:mm:ss", expectedFormat: "EEE, d MMM yyyy HH:mm") else {
+        guard let trascationDate = transactionDate, let localDate = Date().dateFromString(trascationDate, currentFormat: AccountTransactionDetailsModel.transactionDateFormat, expectedFormat: AccountTransactionDetailsModel.viewDateFormat) else {
             return nil
         }
         return localDate

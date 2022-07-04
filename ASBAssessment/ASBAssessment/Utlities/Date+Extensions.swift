@@ -31,4 +31,17 @@ extension Date {
         }
         return dateFormatter.string(from: unwrappedDate)
     }
+
+    /// This method formats string date to another expected date
+    /// - Parameters:
+    ///   - dateString: String Date
+    ///   - format: String Date Format
+    /// - Returns: Date
+    func dateFromString(_ dateString: String, format: String) -> Date? {
+        let dateFormatter = Date.dateFormatter
+        dateFormatter.locale = Locale.current
+        dateFormatter.dateFormat =  format
+        return dateFormatter.date(from: dateString)
+    }
+
 }

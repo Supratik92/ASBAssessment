@@ -26,5 +26,7 @@ struct AccountDetailsConstants {
         static let map = "map"
         static let list = "list.dash"
         static let chevron = "chevron.right"
+        static let card = "creditcard.circle"
+        static let bank = "banknote"
     }
 }

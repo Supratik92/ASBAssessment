@@ -12,3 +12,13 @@
 "transaction.okay" = "Okay";
 "transactions.loading" = "Loading";
 "transaction.accountStatement" = "Account Statements";
+"transaction.id" = "Id: ";
+"transaction.summary" = "Summary";
+"transaction.date" = "Okay";
+"transactions.debit" = "Debit";
+"transaction.credit" = "Credit";
+"transaction.netAmount" = "Net Amount";
+"transaction.totalAmount" = "Total Amount";
+"transaction.gst" = "GST";
+"transaction.transactionType" = "Transaction Type:";
+"transaction.details" = "Transaction Details";

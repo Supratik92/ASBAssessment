@@ -11,13 +11,12 @@ struct AccountTransactionDetailsListView: View {
 
     // MARK: - Constants
     private struct AccountTransactionDetailsListViewConstants {
-        static let transactionReflectionTimeToAccount = "72"
         static let dividerHeight: CGFloat = 1
         static let arrowImageWidth: CGFloat = 8.35
         static let notransactionFoundLineHeight: CGFloat = 17
         static let numberOfPagesTrailingPadding: CGFloat = 17.25
-        static let chevronWidth: CGFloat = 6.26
-        static let chevronHeight: CGFloat = 16
+        static let chevronWidth: CGFloat = 20
+        static let chevronHeight: CGFloat = 20
         static let transactionStatusRowViewCornerRadius: CGFloat = 3
         static let transactionSummaryWidth: CGFloat = 248
         static let oneCount = 1
@@ -53,9 +52,7 @@ struct AccountTransactionDetailsListView: View {
                     ProgressView("transactions.loading".localized())
                 }
             }.navigationTitle(Text("transaction.accountStatement".localized()))
-                .navigationViewStyle(.automatic)
-                .navigationBarTitleDisplayMode(.automatic)
-                .onAppear {
+                .onFirstAppear {
                     loadTransactionList()
                 }
         }.alert(isPresented: $showError) {
@@ -63,6 +60,7 @@ struct AccountTransactionDetailsListView: View {
                   message: Text(errorDescription),
                   dismissButton: .default(Text("transaction.okay")))
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
@@ -75,7 +73,11 @@ extension AccountTransactionDetailsListView {
             VStack(alignment: .leading, spacing: AccountDetailsConstants.LayoutConstants.marginEight) {
                 ForEach(.zero..<viewModel.transactionDetailsArrayCount, id: \.self) { index in
                     if let transaction = viewModel.accountTransactionModel(for: index) {
-                        transactionStatusView(for: transaction)
+                        NavigationLink {
+                            AccountTransactionDetailsView(viewModel: AccountTransactionDetailsViewModel(transactionDetailModel: transaction))
+                        } label: {
+                            transactionStatusView(for: transaction)
+                        }
                     }
                 }
             }.padding([.leading, .trailing], AccountDetailsConstants.LayoutConstants.defaultMargin)
@@ -87,15 +89,33 @@ extension AccountTransactionDetailsListView {
     /// - Returns: View
     private func transactionStatusView(for info: AccountTransactionDetailsModel) -> some View {
         VStack(alignment: .leading, spacing: AccountDetailsConstants.LayoutConstants.marginThirtyTwo) {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: .zero) {
-                    transactionActivityTextView(text: info.summary, font: .helveticaTweleveBold)
-                        .frame(width: AccountTransactionDetailsListViewConstants.transactionSummaryWidth)
-                    transactionActivityTextView(text: info.trasactionDateLocalFormat, font: .helveticaFourteen)
-                }
-                Spacer()
-                transactionActivityTextView(text: info.amount, font: .helveticaTweleveBold)
-            }.padding()
+            HStack(alignment: .center) {
+                // credit image
+                Image(systemName: AccountDetailsConstants.ImageName.card)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(.white)
+                    .frame(width: 40, height: 40)
+
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: AccountDetailsConstants.LayoutConstants.defaultMargin) {
+                        transactionActivityTextView(text: info.summary, font: .helveticaFourteenBold)
+
+                        transactionActivityTextView(text: info.trasactionDateLocalFormat, font: .helveticaFourteen)
+                    }
+                    Spacer()
+
+                    VStack(alignment: .trailing) {
+                        transactionActivityTextView(text: info.amount, font: .helveticaTweleveBold)
+                        Spacer()
+                        Image(systemName: AccountDetailsConstants.ImageName.chevron)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(.white)
+                            .frame(width: AccountTransactionDetailsListViewConstants.chevronWidth, height: AccountTransactionDetailsListViewConstants.chevronHeight)
+                    }
+                }.padding()
+            }.padding(.leading, AccountDetailsConstants.LayoutConstants.defaultMargin)
         }.background(info.isDebited != nil ? (info.isDebited == true ? AccountTransactionDetailsListViewConstants.debitBackgroundColor : AccountTransactionDetailsListViewConstants.creditBackgroundColor) : Color.white)
             .cornerRadius(AccountTransactionDetailsListViewConstants.transactionStatusRowViewCornerRadius)
     }
@@ -108,7 +128,7 @@ extension AccountTransactionDetailsListView {
     @ViewBuilder private func transactionActivityTextView(text: String?, font: Font) -> some View {
         if let text = text, !text.isEmpty {
             Text(text.localized())
-                .foregroundColor(.black)
+                .foregroundColor(.black.opacity(0.8))
                 .font(font)
                 .frame(alignment: .center)
                 .fixedSize(horizontal: false, vertical: true)

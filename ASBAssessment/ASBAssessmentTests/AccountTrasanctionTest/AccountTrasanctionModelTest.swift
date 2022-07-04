@@ -53,6 +53,7 @@ class AccountTrasanctionModelTest: XCTestCase {
                 XCTAssertNotNil(transaction.debit)
                 XCTAssertNotNil(transaction.credit)
                 XCTAssertNotNil(transaction.summary)
+                XCTAssertNotNil(transaction.trasactionDateLocalFormat)
             }
         }
     }
@@ -83,7 +84,7 @@ class AccountTrasanctionModelTest: XCTestCase {
         await setupAccountTransactionModel()
         if let accountTransactionModelArray = self.accountTransactionModelArray {
             for transaction in accountTransactionModelArray {
-                print(transaction.trasactionDateLocalFormat)
+                XCTAssert(transaction.amount != "")
             }
         }
     }

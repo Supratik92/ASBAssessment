@@ -9,6 +9,9 @@ import Foundation
 
 extension String {
 
+    /// Constant for empty string
+    static let emptyString = ""
+
      /// Localization method to read localized key from bundle
     func localized() -> String {
         return localized(tableName: nil, bundle: Bundle.main)
