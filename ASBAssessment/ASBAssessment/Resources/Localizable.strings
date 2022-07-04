@@ -17,8 +17,13 @@
 "transaction.date" = "Okay";
 "transactions.debit" = "Debit";
 "transaction.credit" = "Credit";
-"transaction.netAmount" = "Net Amount";
-"transaction.totalAmount" = "Total Amount";
+"transaction.netAmount" = "Net Amount:";
+"transaction.totalAmount" = "Total Amount:";
 "transaction.gst" = "GST";
+"transaction.date" = "Date of Transaction:";
 "transaction.transactionType" = "Transaction Type:";
 "transaction.details" = "Transaction Details";
+"accessibilityLabel.summary" = "Transaction Summary, ";
+"accessibilityLabel.date" = "Transaction Date, ";
+"accessibilityLabel.amount" = "Amount, ";
+"accessibilityLabel.navigate" = "Double Tap to navigate to transaction details.";

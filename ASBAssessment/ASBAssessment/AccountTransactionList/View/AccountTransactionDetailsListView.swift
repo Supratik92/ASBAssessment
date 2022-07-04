@@ -11,19 +11,19 @@ struct AccountTransactionDetailsListView: View {
 
     // MARK: - Constants
     private struct AccountTransactionDetailsListViewConstants {
-        static let dividerHeight: CGFloat = 1
-        static let arrowImageWidth: CGFloat = 8.35
         static let notransactionFoundLineHeight: CGFloat = 17
-        static let numberOfPagesTrailingPadding: CGFloat = 17.25
         static let chevronWidth: CGFloat = 20
         static let chevronHeight: CGFloat = 20
         static let transactionStatusRowViewCornerRadius: CGFloat = 3
         static let transactionSummaryWidth: CGFloat = 248
-        static let oneCount = 1
-        static let chevronLeftRotation: Double = 180
         static let transactionHeaderTitleId = "transactionHeaderTitleId"
         static let debitBackgroundColor = Color.red.opacity(0.6)
         static let creditBackgroundColor = Color.green.opacity(0.6)
+        static let transactionStatusViewImageDimensions: CGFloat = 40
+        static let textColorOpacity: CGFloat = 0.8
+        static let accessibilityPriorityFirst: Double = 2
+        static let accessibilityPrioritySecond: Double = 1
+        static let accessibilityPriorityThird: Double = 0
     }
 
     // MARK: - Properties
@@ -33,7 +33,7 @@ struct AccountTransactionDetailsListView: View {
     @State private var showError: Bool = false
 
     /// Property to show error description
-    @State private var errorDescription: String = ""
+    @State private var errorDescription: String = .emptyString
 
 
     var body: some View {
@@ -77,7 +77,8 @@ extension AccountTransactionDetailsListView {
                             AccountTransactionDetailsView(viewModel: AccountTransactionDetailsViewModel(transactionDetailModel: transaction))
                         } label: {
                             transactionStatusView(for: transaction)
-                        }
+                        }.accessibilityElement(children: .contain)
+                            .accessibilityRemoveTraits(.isButton)
                     }
                 }
             }.padding([.leading, .trailing], AccountDetailsConstants.LayoutConstants.defaultMargin)
@@ -95,18 +96,26 @@ extension AccountTransactionDetailsListView {
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(.white)
-                    .frame(width: 40, height: 40)
+                    .frame(width: AccountTransactionDetailsListViewConstants.transactionStatusViewImageDimensions, height: AccountTransactionDetailsListViewConstants.transactionStatusViewImageDimensions)
+                    .accessibilityHidden(true)
 
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: AccountDetailsConstants.LayoutConstants.defaultMargin) {
                         transactionActivityTextView(text: info.summary, font: .helveticaFourteenBold)
+                            .accessibilityLabel(Text(accessibilitySummaryLabel(text: info.summary)))
+                            .accessibilitySortPriority(AccountTransactionDetailsListViewConstants.accessibilityPriorityFirst)
 
                         transactionActivityTextView(text: info.trasactionDateLocalFormat, font: .helveticaFourteen)
+                            .accessibilityLabel(Text(accessibilityDateLabel(text: info.trasactionDateLocalFormat)))
+                            .accessibilitySortPriority(AccountTransactionDetailsListViewConstants.accessibilityPrioritySecond)
                     }
                     Spacer()
 
                     VStack(alignment: .trailing) {
                         transactionActivityTextView(text: info.amount, font: .helveticaTweleveBold)
+                            .accessibilityLabel(Text(accessibilityAmountLabel(text: info.amount)))
+                            .accessibilityHint(Text(accessibilityAmountHint(isDebit: info.isDebited)))
+                            .accessibilitySortPriority(AccountTransactionDetailsListViewConstants.accessibilityPriorityThird)
                         Spacer()
                         Image(systemName: AccountDetailsConstants.ImageName.chevron)
                             .resizable()
@@ -118,6 +127,7 @@ extension AccountTransactionDetailsListView {
             }.padding(.leading, AccountDetailsConstants.LayoutConstants.defaultMargin)
         }.background(info.isDebited != nil ? (info.isDebited == true ? AccountTransactionDetailsListViewConstants.debitBackgroundColor : AccountTransactionDetailsListViewConstants.creditBackgroundColor) : Color.white)
             .cornerRadius(AccountTransactionDetailsListViewConstants.transactionStatusRowViewCornerRadius)
+            .accessibilityElement(children: .contain)
     }
 
     /// This method creates a text view for transaction
@@ -128,7 +138,7 @@ extension AccountTransactionDetailsListView {
     @ViewBuilder private func transactionActivityTextView(text: String?, font: Font) -> some View {
         if let text = text, !text.isEmpty {
             Text(text.localized())
-                .foregroundColor(.black.opacity(0.8))
+                .foregroundColor(.black.opacity(AccountTransactionDetailsListViewConstants.textColorOpacity))
                 .font(font)
                 .frame(alignment: .center)
                 .fixedSize(horizontal: false, vertical: true)
@@ -162,10 +172,36 @@ extension AccountTransactionDetailsListView {
             }
         }
     }
-}
 
-struct AccountTransactionDetailsListView_Previews: PreviewProvider {
-    static var previews: some View {
-        AccountTransactionDetailsListView()
+    /// Accessibility Summary Label
+    /// - Parameter text: accessibility text
+    /// - Returns: Provides Accessibility Summary Label
+    private func accessibilitySummaryLabel(text: String?) -> String {
+        let accessibilitySummary = "accessibilityLabel.summary".localized() + (text ?? .emptyString)
+        return accessibilitySummary
     }
+
+    /// Accessibility Date Label
+    /// - Parameter text: accessibility text
+    /// - Returns: Provides Accessibility Date Label
+    private func accessibilityDateLabel(text: String?) -> String {
+        let accessibilitySummary = "accessibilityLabel.date".localized() + (text ?? .emptyString)
+        return accessibilitySummary
+    }
+
+    /// Accessibility Amount Label
+    /// - Parameter text: accessibility text
+    /// - Returns: Provides Accessibility Amount Label
+    private func accessibilityAmountLabel(text: String?) -> String {
+        return "accessibilityLabel.amount".localized() + (text ?? .emptyString)
+    }
+
+    /// Accessibility Amount Hint
+    /// - Parameter isDebit: Is Debited transaction
+    /// - Returns: Provides Accessibility Amount Hint
+    private func accessibilityAmountHint(isDebit: Bool?) -> String {
+        let creditOrDebit: String = isDebit != nil ? (isDebit == true ? "transactions.debit".localized() : "transaction.credit".localized()) : .emptyString
+        return creditOrDebit
+    }
+
 }

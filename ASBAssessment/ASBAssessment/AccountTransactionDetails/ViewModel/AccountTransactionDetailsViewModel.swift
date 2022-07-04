@@ -63,6 +63,8 @@ class AccountTransactionDetailsViewModel: ObservableObject {
         transactionDetailGridArray.append("\(id)")
         transactionDetailGridArray.append("transaction.summary".localized())
         transactionDetailGridArray.append(summary)
+        transactionDetailGridArray.append("\("transaction.date")".localized())
+        transactionDetailGridArray.append(transactionDate)
         transactionDetailGridArray.append("transaction.netAmount".localized())
         transactionDetailGridArray.append(gstAndNetAmount.netAmount)
         transactionDetailGridArray.append("transaction.gst".localized())

@@ -39,14 +39,13 @@ class AccountTransactionDetailsTests: XCTestCase {
         XCTAssert(gstAndNetAmount.netAmount == "7972.62")
     }
 
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    func testtransactionDetailGridArray() async {
+        let responseModel = await setupAccountTransactionModel()
+        let accountTransactionViewModel = AccountTransactionDetailsViewModel(transactionDetailModel: responseModel[.zero])
+        XCTAssert(accountTransactionViewModel.transactionDetailGridArray.count == 12)
+        XCTAssert(accountTransactionViewModel.transactionDetailGridArray.first == "transaction.id".localized())
     }
+
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.

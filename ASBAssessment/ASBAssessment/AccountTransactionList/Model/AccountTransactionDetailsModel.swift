@@ -52,7 +52,7 @@ extension AccountTransactionDetailsModel {
                 return "+\(creditAmount.delimiter)"
             }
         }
-        return ""
+        return .emptyString
     }
 
     /// Transaction Date EEE, d MMM yyyy HH:mm format

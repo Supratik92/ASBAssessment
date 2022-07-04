@@ -16,7 +16,7 @@ class AccountTransactionDetailsListViewModel: ObservableObject {
     @Published private var transactionDetailsArray: [AccountTransactionDetailsModel] = []
 
     /// Property to know if screen is loading due to web request
-    @Published var isScreenLoading = false
+    @Published var isScreenLoading: Bool = false
 
     /// Property to provide Transaction Details Array Count
     var transactionDetailsArrayCount: Int {
